@@ -12,9 +12,10 @@
       <tbody v-if="data">
         <tr v-for="crypto in data.data" :key="crypto.id">
           <td>{{ crypto.name }}<br />{{ crypto.symbol }}</td>
-          <td>{{ crypto.priceUsd }}</td>
-          <td>{{ crypto.changePercent24Hr }}</td>
-          <td>{{ crypto.marketCapUsd }}</td>
+          <td>${{ millify(crypto.priceUsd) }}</td>
+          <td :style="{ color: crypto.changePercent24Hr > 0 ? 'rgb(14, 203, 129)' : 'red' }"> {{ crypto.changePercent24Hr
+            > 0 ? '+' : '' }}{{ parseFloat(crypto.changePercent24Hr).toFixed(2) }}</td>
+          <td>{{ millify(crypto.marketCapUsd) }}</td>
         </tr>
       </tbody>
     </table>
@@ -23,6 +24,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import millify from 'millify';
 
 const data = ref(null);
 
