@@ -9,8 +9,8 @@
           <th>Market Cap</th>
         </tr>
       </thead>
-      <tbody v-if="data">
-        <tr v-for="crypto in data.data" :key="crypto.id">
+      <tbody v-if="cryptosData">
+        <tr v-for="crypto in cryptosData.data" :key="crypto.id">
           <td>{{ crypto.name }}<br />{{ crypto.symbol }}</td>
           <td>${{ millify(crypto.priceUsd) }}</td>
           <td :style="{ color: crypto.changePercent24Hr > 0 ? 'rgb(14, 203, 129)' : 'red' }"> {{ crypto.changePercent24Hr
@@ -22,24 +22,23 @@
   </section>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { ref, onMounted, watch } from 'vue';
+import { useStore } from 'vuex';
 import millify from 'millify';
 
-const data = ref(null);
+const store = useStore();
+const cryptosData = ref(null);
 
 const getCryptosData = () => {
-  axios.get('https://api.coincap.io/v2/assets')
-    .then(response => {
-      data.value = response.data;
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
-    });
+  store.dispatch('crypto/fetchCryptosData');
 };
 
 onMounted(() => {
   getCryptosData();
+});
+
+watch(() => store.getters['crypto/getCryptosData'], (newCryptosData) => {
+  cryptosData.value = newCryptosData;
 });
 </script>
 

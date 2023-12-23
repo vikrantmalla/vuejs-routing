@@ -1,14 +1,14 @@
-import { state } from './state'
-import { actions } from '../crypto/actions'
-import { getters } from '../crypto/getters'
-import { mutations } from '../crypto/mutations'
+import { state } from './crypto-state'
+import { actions } from './crypto-actions'
+import { getters } from './crypto-getters'
+import { mutations } from './crypto-mutations'
 
 const crypto = {
   namespaced: true,
   state,
+  mutations,
   actions,
   getters,
-  mutations
 }
 
 export default crypto
