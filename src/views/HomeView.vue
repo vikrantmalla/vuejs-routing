@@ -1,32 +1,26 @@
 <template>
-  <section class="wrappers">
-    <table class="coins">
-      <thead>
-        <tr>
-          <th>Coin</th>
-          <th>Price</th>
-          <th>24hrs change</th>
-          <th>Market Cap</th>
-        </tr>
-      </thead>
-      <tbody v-if="cryptosData">
-        <tr v-for="crypto in cryptosData.data" :key="crypto.id">
-          <td>{{ crypto.name }}<br />{{ crypto.symbol }}</td>
-          <td>${{ millify(crypto.priceUsd) }}</td>
-          <td :style="{ color: crypto.changePercent24Hr > 0 ? 'rgb(14, 203, 129)' : 'red' }"> {{ crypto.changePercent24Hr
-            > 0 ? '+' : '' }}{{ parseFloat(crypto.changePercent24Hr).toFixed(2) }}</td>
-          <td>{{ millify(crypto.marketCapUsd) }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+  <div>
+    <div v-if="isLoading">
+      <LoadingText />
+    </div>
+    <div v-else>
+      <div v-if="cryptosData">
+        <CoinTable :cryptosData="cryptosData" />
+      </div>
+      <div v-else class="not-found">
+        No data available.
+      </div>
+    </div>
+  </div>
 </template>
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { useStore } from 'vuex';
-import millify from 'millify';
+import LoadingText from '@/components/common/LoadingText.vue';
+import CoinTable from '@/components/modules/Home/CoinTable.vue';
 
 const store = useStore();
+const isLoading = ref(false);
 const cryptosData = ref(null);
 
 const getCryptosData = () => {
@@ -37,9 +31,14 @@ onMounted(() => {
   getCryptosData();
 });
 
+watch(() => store.getters['crypto/isLoading'], (newLoadingState) => {
+  isLoading.value = newLoadingState;
+});
+
 watch(() => store.getters['crypto/getCryptosData'], (newCryptosData) => {
   cryptosData.value = newCryptosData;
 });
+
 </script>
 
 <style scoped>
@@ -72,5 +71,12 @@ th,
 td {
   padding: 1rem;
   border-bottom: 1px solid #ddd;
+}
+
+.not-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
 }
 </style>
