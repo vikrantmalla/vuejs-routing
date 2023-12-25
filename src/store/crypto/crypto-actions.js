@@ -1,13 +1,17 @@
-import axios from 'axios';
-
+import axios from 'axios'
 
 export const actions = {
   async fetchCryptosData({ commit }) {
     try {
-      const response = await axios.get('https://api.coincap.io/v2/assets');
-      commit('setCryptosData', response.data);
+      commit('setLoading', true)
+      const response = await axios.get('https://api.coincap.io/v2/assets')
+      commit('setCryptosData', response.data)
+      setTimeout(() => {
+        commit('setLoading', false)
+      }, 2000)
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching data:', error)
+      commit('setLoading', false)
     }
-  },
-};
+  }
+}
