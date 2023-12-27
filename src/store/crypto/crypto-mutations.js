@@ -4,5 +4,8 @@ export const mutations = {
   },
   setLoading(state, value) {
     state.loading = value
+  },
+  setSingleCoinData(state, data) {
+    state.singleCoinData = data;
   }
 }
