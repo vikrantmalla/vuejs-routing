@@ -1,4 +1,4 @@
 export const getters = {
   isLoading: (state) => state.loading,
-  getCryptosData: (state) => state.cryptosData
+  getCryptosData: (state) => state.cryptosData,
 }

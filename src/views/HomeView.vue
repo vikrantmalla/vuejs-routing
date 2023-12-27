@@ -12,6 +12,7 @@
       </div>
     </div>
   </div>
+  
 </template>
 <script setup>
 import { ref, onMounted, watch } from 'vue';
@@ -22,13 +23,20 @@ import CoinTable from '@/components/modules/Home/CoinTable.vue';
 const store = useStore();
 const isLoading = ref(false);
 const cryptosData = ref(null);
-
+const singleCoinData = ref(null);
+console.log(singleCoinData.value)
 const getCryptosData = () => {
   store.dispatch('crypto/fetchCryptosData');
 };
 
+const getSingleCoinData = async () => {
+  const coinId = 'binance-coin'; 
+  await store.dispatch('crypto/getSingleCoinData', coinId);
+};
+
 onMounted(() => {
   getCryptosData();
+  getSingleCoinData();
 });
 
 watch(() => store.getters['crypto/isLoading'], (newLoadingState) => {
@@ -37,6 +45,10 @@ watch(() => store.getters['crypto/isLoading'], (newLoadingState) => {
 
 watch(() => store.getters['crypto/getCryptosData'], (newCryptosData) => {
   cryptosData.value = newCryptosData;
+});
+
+watch(() => store.state.crypto.singleCoinData, (newCryptosData) => {
+  singleCoinData.value = newCryptosData;
 });
 
 </script>
