@@ -22,7 +22,7 @@
         </table>
     </section>
 </template>
-<script setup>
+<script setup lang="ts">
 import millify from 'millify';
 const { cryptosData } = defineProps(['cryptosData']);
 </script>

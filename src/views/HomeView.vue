@@ -14,7 +14,7 @@
   </div>
   
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import { useStore } from 'vuex';
 import LoadingText from '@/components/common/LoadingText.vue';
